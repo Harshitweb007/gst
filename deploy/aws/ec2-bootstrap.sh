@@ -5,7 +5,7 @@ set -euo pipefail
 # Run as root or with sudo: sudo bash ec2-bootstrap.sh
 
 APP_DIR="${APP_DIR:-/opt/invoice-app}"
-REPO_URL="${REPO_URL:-https://github.com/Harshitweb007/Gst-innvoice-genrator.git}"
+REPO_URL="${REPO_URL:-https://github.com/Harshitweb007/gst.git}"
 BRANCH="${BRANCH:-main}"
 
 if [ "$(id -u)" -ne 0 ]; then

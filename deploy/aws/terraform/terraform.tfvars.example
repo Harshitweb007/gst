@@ -8,5 +8,5 @@ razorpay_key_id     = "rzp_test_xxxxxxxx"
 razorpay_key_secret = "your-razorpay-secret"
 
 # After pushing deploy/ to GitHub, defaults work:
-# git_repo_url = "https://github.com/Harshitweb007/Gst-innvoice-genrator.git"
+# git_repo_url = "https://github.com/Harshitweb007/gst.git"
 # git_branch   = "main"

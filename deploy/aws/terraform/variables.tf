@@ -31,7 +31,7 @@ variable "allowed_ssh_cidr" {
 variable "git_repo_url" {
   description = "Git repo cloned on the EC2 instance"
   type        = string
-  default     = "https://github.com/Harshitweb007/Gst-innvoice-genrator.git"
+  default     = "https://github.com/Harshitweb007/gst.git"
 }
 
 variable "git_branch" {
