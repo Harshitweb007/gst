@@ -8,8 +8,8 @@ app.use(express.json());
 app.use(cors());
 
 const razorpay = new Razorpay({
-    key_id: "rzp_test_RmbMCiiHISeIHG",//copy something
-    key_secret: "Bb1wTeLbtjX2HI9HkFxe1BAA",
+    key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_RmbMCiiHISeIHG",
+    key_secret: process.env.RAZORPAY_KEY_SECRET || "Bb1wTeLbtjX2HI9HkFxe1BAA",
 });
 
 // Create Order API
@@ -39,7 +39,7 @@ app.post("/verify-payment", (req, res) => {
     const body = order_id + "|" + payment_id;
 
     const expectedSignature = crypto
-        .createHmac("sha256", "")
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || "Bb1wTeLbtjX2HI9HkFxe1BAA")
         .update(body.toString())
         .digest("hex");
 
@@ -50,4 +50,5 @@ app.post("/verify-payment", (req, res) => {
     res.json({ success: false });
 });
 
-app.listen(4000, () => console.log("Server running on port 4000"));
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -8,7 +8,9 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const BASE_URL = "http://localhost:5001/api";
+import { API_URL } from "../config/api";
+
+const BASE_URL = `${API_URL}/api`;
 
 export default function AdminPanel() {
   const adminName = "Admin Harshit";

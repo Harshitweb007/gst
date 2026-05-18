@@ -1,0 +1,66 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: invoice-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backendpart
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USER:-harshitsahni}/invoice-generator-backend:latest
+    container_name: invoice-backend
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      PORT: 5001
+      MONGO_URI: mongodb://mongodb:27017/invoice_generator
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:8080}
+    ports:
+      - "5001:5001"
+
+  payment:
+    build:
+      context: .
+      dockerfile: Dockerfile.payment
+    image: ${DOCKERHUB_USER:-harshitsahni}/invoice-generator-payment:latest
+    container_name: invoice-payment
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-rzp_test_RmbMCiiHISeIHG}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-Bb1wTeLbtjX2HI9HkFxe1BAA}
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build:
+      context: ./frontendpart
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5001}
+        VITE_PAYMENT_URL: ${VITE_PAYMENT_URL:-http://localhost:4000}
+        VITE_RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-rzp_test_RmbMCiiHISeIHG}
+    image: ${DOCKERHUB_USER:-harshitsahni}/invoice-generator-frontend:latest
+    container_name: invoice-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - payment
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo_data:

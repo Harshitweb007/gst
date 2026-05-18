@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -40,10 +41,10 @@ export default function Dashboard() {
         const token = localStorage.getItem("token");
 
         const [dashboardRes, invoiceRes] = await Promise.all([
-          fetch("http://localhost:5001/api/dashboard", {
+          fetch(`${API_URL}/api/dashboard`, {
             headers: { Authorization: `Bearer ${token}` }
           }),
-          fetch("http://localhost:5001/api/invoices", {
+          fetch(`${API_URL}/api/invoices`, {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);

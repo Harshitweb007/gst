@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Footer from "./Footer";
 import { NavLink } from "react-router-dom";
+import { API_URL } from "../config/api";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ function Contact() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5001/api/contact", {
+      const res = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

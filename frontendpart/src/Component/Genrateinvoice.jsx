@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Download } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 function InvoiceGenerator() {
   const [invoiceData, setInvoiceData] = useState({
@@ -125,7 +126,7 @@ function InvoiceGenerator() {
       totalAmount: totals.finalTotal
     };
 
-    const res = await fetch("http://localhost:5001/api/invoices", {
+    const res = await fetch(`${API_URL}/api/invoices`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

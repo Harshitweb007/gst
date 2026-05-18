@@ -1,0 +1,12 @@
+aws_region          = "ap-south-1"
+instance_type       = "t3.medium"
+key_name            = ""                    # e.g. "my-ec2-key" (optional)
+allowed_ssh_cidr    = "YOUR_PUBLIC_IP/32"   # restrict SSH in production
+
+jwt_secret          = "replace-with-long-random-secret"
+razorpay_key_id     = "rzp_test_xxxxxxxx"
+razorpay_key_secret = "your-razorpay-secret"
+
+# After pushing deploy/ to GitHub, defaults work:
+# git_repo_url = "https://github.com/Harshitweb007/Gst-innvoice-genrator.git"
+# git_branch   = "main"

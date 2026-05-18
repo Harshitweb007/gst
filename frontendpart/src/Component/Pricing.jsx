@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Footer from "./Footer";
+import { PAYMENT_URL, RAZORPAY_KEY } from "../config/api";
 
 function Pricing() {
   // ✅ REQUIRED STATES
@@ -33,7 +34,7 @@ function Pricing() {
     // ✅ Convert to paise
     const amount = (isYearly ? plan.yearly : plan.monthly) * 100;
 
-    const order = await fetch("http://localhost:4000/create-order", {
+    const order = await fetch(`${PAYMENT_URL}/create-order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount }),
@@ -45,7 +46,7 @@ function Pricing() {
     }
 
     const options = {
-      key: "rzp_test_RmbMCiiHISeIHG",
+      key: RAZORPAY_KEY,
       amount: order.amount,
       currency: "INR",
       name: "GST INVOICE GENERATOR",
@@ -53,7 +54,7 @@ function Pricing() {
       order_id: order.id,
 
       handler: async function (response) {
-        const verify = await fetch("http://localhost:4000/verify-payment", {
+        const verify = await fetch(`${PAYMENT_URL}/verify-payment`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
