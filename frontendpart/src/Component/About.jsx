@@ -11,7 +11,7 @@ function About() {
             <div className="col-xl-5 mx-auto mb-6">
               <h1 className="display-1 mb-3">About Us</h1>
               <p className="lead mb-0">
-                A company turning ideas into Great things.
+                A company turning ideas into new things.
               </p>
             </div>
           </div>
