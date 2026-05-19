@@ -135,7 +135,7 @@ function Contact() {
                   type="submit"
                   className="btn btn-primary rounded-pill px-5"
                 >
-                  Send Message
+                  Send Messagesss
                 </button>
 
                 {status && <p className="mt-3">{status}</p>}
