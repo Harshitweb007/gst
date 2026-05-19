@@ -21,6 +21,7 @@ jobs:
         run: |
           cat > .env <<EOF
           JWT_SECRET=ci-build-only-not-used-in-production
+          REDIS_URL=redis://redis:6379
           RAZORPAY_KEY_ID=rzp_test_ci
           RAZORPAY_KEY_SECRET=ci-build-only
           FRONTEND_URL=http://localhost

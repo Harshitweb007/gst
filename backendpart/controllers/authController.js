@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { addToBlacklist } = require("../utils/tokenBlacklist");
+const { del, cacheKeys } = require("../utils/cache");
 
 
 exports.signup = async (req, res) => {
@@ -104,6 +106,29 @@ exports.getMe = async (req, res) => {
     // req.user already attached by authMiddleware
     res.json(req.user);
   } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : null;
+
+    if (token) {
+      await addToBlacklist(token);
+    }
+
+    if (req.user?.id || req.user?._id) {
+      const userId = req.user.id || req.user._id;
+      await del(cacheKeys.user(userId));
+    }
+
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };

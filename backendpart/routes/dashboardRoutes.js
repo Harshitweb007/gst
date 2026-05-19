@@ -1,11 +1,19 @@
 const express = require("express");
 const Invoice = require("../models/Invoice");
 const auth = require("../middleware/auth");
+const { getJson, setJson, cacheKeys } = require("../utils/cache");
 
 const router = express.Router();
+const DASHBOARD_CACHE_TTL = 60;
 
 router.get("/", auth, async (req, res) => {
   try {
+    const cacheKey = cacheKeys.dashboard(req.user.id);
+    const cached = await getJson(cacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+
     const invoices = await Invoice.find({ user: req.user.id });
 
     let totalSales = 0;
@@ -52,7 +60,7 @@ router.get("/", auth, async (req, res) => {
         value
       }));
 
-    res.json({
+    const payload = {
       totals: {
         purchaseDue: 0,
         salesDue,
@@ -67,7 +75,10 @@ router.get("/", auth, async (req, res) => {
       },
       salesBreakdown: salesBreakdown || [],
       monthlySales: monthlySales || []
-    });
+    };
+
+    await setJson(cacheKey, payload, DASHBOARD_CACHE_TTL);
+    res.json(payload);
 
   } catch (err) {
     console.error("Dashboard error:", err);
